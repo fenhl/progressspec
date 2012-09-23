@@ -1,7 +1,7 @@
 Progress communication protocol
 ===============================
 
-version Fenhl/1
+version Fenhl/2
 
 This protocol is used for communication between Progress clients and servers. If two servers communicate with each other, one takes on the role of a client.
 
@@ -14,6 +14,23 @@ Each message starts with a keyword, and optionally continues with one or more ar
 keywords
 ========
 
+auth
+----
+
+both ways
+
+Sent by the client when the user wants to log in. The server responds with this, detailing which authentication methods it supports. The client does not send any arguments.
+
+arguments:
+
+*   an authentication method from the list below that is accepted by the server,
+    e.g. "pwd".
+*   optionally, more authentication methods.
+
+authentication methods:
+
+*   pwd: a password (any of Unicode except U+0, U+A and U+20) sent in plaintext.
+
 hi
 --
 
@@ -23,8 +40,8 @@ Sent after establishing a new connection to let the client know which version th
 
 arguments:
 
-*   the version, e.g. "Fenhl/1". If this is not "Fenhl/1", the client MUST
+*   the version, e.g. "Fenhl/2". If this is not "Fenhl/2", the client MUST
     immediately disconnect, and SHOULD present the user (if any) with an
     appropriate error message. If this is "Fenhl/" followed by a number greater
-    than 1, the client SHOULD attempt to automatically update to the latest
-    version, unless prohibited by the user.
+    than 2, the client SHOULD attempt to automatically update to a version of
+    itself that supports the version, unless prohibited by the user.
